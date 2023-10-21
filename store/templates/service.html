@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+<div class="container">
+    <div class="bg-img2 col-12">
+        <!-- <p>24/7 On-Spot</p>
+        <h1>
+            service
+        </h1> -->
+    </div>
+    <div class="p-3 m-3">
+        	<!-- all products -->
+		<div id='products' class="col-lg-9 mx-auto">
+			<div class="row mx-auto">
+				{% for service in services %}
+                <div class="card mx-auto mb-3 open-modal" id="{{service.id}}" data-service-id="{{ service.id }}" data-service-name="{{ service.name }}" style="width: 10rem; border: 1px solid #000;">
+                    <img class="card-img-top" src="/image/download/uploads/service/{{service.id}}.svg" alt="Card image cap">
+                    <div class="card-body">
+                        <p class="card-title">{{service.name}}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+      <!-- Add a button to trigger the modal -->
+<!-- <button id="loginButton" class="btn btn-sm btn-success col-lg-12">Login</button> -->
+
+<!-- Define the modal -->
+<div id="myModal" class="modal">
+    {% if request.session.customer %}
+  <div class="modal-content col-lg-5 rounded mx-auto border pt-4">
+    <span class="close" id="closeModal">&times;</span>
+    <h3 class="alert alert-light rounded-pill" id="modalHeader" style="text-align:center">h1</h3>
+    <form action="/orders" method="POST">
+      {% csrf_token %}
+      {% if error %}
+      <div class="alert alert-danger" role="alert">
+        {{error}}
+      </div>
+      {% endif %}
+      <!-- email -->
+      <!-- <div class="form-group">
+        <label for="address"> -->
+        <div class="form-group">
+            <label for="name">name</label>
+            <input required type="text" name="name" id="" value="{{values.name}}" class="form-control-sm form-control" placeholder="name">
+        </div>
+      <!-- <div class="form-group">
+        <label for="address">address</label>
+        <input required type="text" name="address" id="" value="{{values.address}}" class="form-control-sm form-control" placeholder="address">
+      </div> -->
+      <div class="form-group">
+        <label for="location">Current location:</label>
+        <input required type="text" name="location" id="current_location" value="{{values.location}}" class="form-control-sm form-control" placeholder="location">
+      </div>
+      <div class="form-group">
+        <label for="phone">Phone:</label>
+        <input required type="text" name="phone" id="" value="{{values.phone}}" class="form-control-sm form-control" placeholder="phone">
+      </div>
+      <div class="form-group">
+        <label for="phone">service</label>
+        <input required type="text" name="service" id="serviceInput" value="{{values.service}}" class="form-control-sm form-control" placeholder="service">
+      </div>
+      <div class="form-group">
+        <label for="phone">workshop_name</label>
+        <input required type="text" name="service" id="serviceInput" value="{{values.service}}" class="form-control-sm form-control" placeholder="service">
+      </div>
+      <div class="form-group">
+        <label for="phone">contact_number</label>
+        <input required type="text" name="service" id="serviceInput" value="{{values.service}}" class="form-control-sm form-control" placeholder="service">
+      </div>
+      <hr>
+      <button type="submit" class="btn btn-sm btn-success col-lg-12">book now</button>
+    </form>
+  </div>
+  {% else %}
+   <div class="modal-content col-lg-5 rounded mx-auto border pt-4">
+    <span class="close" id="closeModal">&times;</span>
+    <h3 class="alert alert-light rounded-pill" style="text-align:center">Please try to  Login </h3>
+    <!-- <button type="submit" class="btn btn-sm btn-success col-lg-12">Login</button> -->
+    <a href="/login" class="btn btn-sm btn-success col-lg-12">Login</a>
+    <a href="/signup" style="display: block;text-align: center;" >Not a member? signup</a>
+
+   </div>
+   {% endif %}
+</div>
+
+    </div>
+</div>
+<script>
+// JavaScript to handle modal display
+// Get the modal and close button
+var modal = document.getElementById('myModal');
+var closeButton = document.getElementsByClassName('close')[0];
+
+// Get all elements with the "open-modal" class
+var openModalButtons = document.getElementsByClassName('open-modal');
+// var serviceId = this.getAttribute('data-service-id');
+// var serviceName = this.getAttribute('data-service-name');
+
+// Add a click event listener to each "open-modal" element
+for (var i = 0; i < openModalButtons.length; i++) {
+    // console.log(openModalButtons[i],"kkk",i)
+    openModalButtons[i].addEventListener('click', function() {
+        modal.style.display = 'block';
+    });
+
+}
+
+// Close the modal when the close button is clicked
+closeButton.addEventListener('click', function() {
+    modal.style.display = 'none';
+});
+
+// Close the modal when the overlay (background) is clicked
+window.addEventListener('click', function(event) {
+    if (event.target == modal) {
+        modal.style.display = 'none';
+    }
+});
+
+// JavaScript to handle the modal and update the header
+document.querySelectorAll('.open-modal').forEach(function(element) {
+    element.addEventListener('click', function() {
+        // Get the data attributes from the clicked div
+        var serviceId = this.getAttribute('data-service-id');
+        var serviceName = this.getAttribute('data-service-name');
+
+        // Update the modal header
+        var modalHeader = document.getElementById('modalHeader');
+        modalHeader.textContent = serviceName;
+    });
+});
+</script>
+
+{% endblock %}
